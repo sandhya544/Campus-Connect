@@ -1,0 +1,546 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="{% static 'js/script.js' %}"></script>
+    <style>
+        .font-s {
+            font-size: x-small;
+        }
+        
+        .btn-w {
+            width: 15rem;
+        }
+        
+        @media (max-width: 480px) {
+            .btn-w {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <!--img src="" alt="Bootstrap" width="30" height="24"-->
+                    <span class="text-dark-emphasis">Campus-Connect |</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="">Home</a>
+                        </li>
+
+                    </ul>
+                    <div class="d-flex" role="search">
+                        <a class="btn btn-primary mx-2" href="{% url 'preview' %}" target="_blank">Preview</a>
+                        <a class="btn btn-danger" href="{% url 'logout' %}">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="d-flex justify-content-center m-2">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#about" aria-expanded="false" aria-controls="collapseExample">
+                About
+            </button>
+        </div>
+        <div class="collapse" id="about">
+            <form class="card card-body border-0 shadow" method="POST">{% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-dark-emphasis">Old : {{ student_data.tagline|truncatechars:20 }}</p>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="YOur Tag Line Here" id="floatingTextarea" maxlength="90" name="tagLine" required></textarea>
+                            <label for="floatingTextarea">Edit</label>
+                        </div>
+                        <span class="font-s">Limited to 90 Characters</span>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-dark-emphasis">Old: {{ student_data.about|truncatechars:20 }}</p>
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" maxlength="400" name="about" required></textarea>
+                            <label for="floatingTextarea">Edit</label>
+                        </div>
+                        <span class="font-s">Limited to 400 Characters</span>
+                    </div>
+                    <div class="container col-4 d-flex justify-content-center">
+                         {% if student_data.gender %}
+                             <select class="form-select" aria-label="Default select example" name="gender" required>
+                                <option value="1" selected>Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                        {% else %}
+                            <select class="form-select" aria-label="Default select example" name="gender" required>
+                                <option value="1">Male</option>
+                                <option value="0" selected>Female</option>
+                            </select>
+                        {% endif %}
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-dark" name="about-btn" type="submit">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center m-2">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#education" aria-expanded="false" aria-controls="collapseExample">
+                Education
+            </button>
+        </div>
+        <div class="collapse" id="education">
+            <form class="card card-body shadow border-0" method="POST">{% csrf_token %}
+                <h4 class="text-dark-emphasis">Graduation</h4>
+                <div class="row row-cols-1 row-cols-lg-4 g-2 g-lg-3">
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">College</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" value="{{ student_data.GradCollege }}" aria-describedby="inputGroup-sizing-sm" name="gradCollege" required maxlength="200">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Branch</span>
+                            <select class="form-select" aria-label="Default select example" name="gradBranch" required>
+                                {% if student_data.GradBranch %}
+                                <option selected value="{{ student_data.GradBranch }}">{{ student_data.GradBranch }}</option>
+                                <option value="Computer Science Engineering">CSE</option>
+                                <option value="Electronic and Communication Engineering">ECE</option>
+                                <option value="Electrical and Electronic Engineering">EEE</option>
+                                <option value="Mechanical Engineering">MECH</option>
+                                <option value="Civil Engineering">CIVIL</option>
+                                {% endif %}
+                                {% if not student_data.GradBranch %}
+                                <option selected value="Computer Science Engineering">CSE</option>
+                                <option value="Electronic and Communication Engineering">ECE</option>
+                                <option value="Electrical and Electronic Engineering">EEE</option>
+                                <option value="Mechanical Engineering">MECH</option>
+                                <option value="Civil Engineering">CIVIL</option>
+                                {% endif %}
+                              </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Percentage</span>
+                            <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" max="100" name="gradPercentage" value="{{ student_data.GradPercentage }}" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Year of Passed Out</span>
+                            <input type="number" class="form-control" aria-label="Sizing example input" value="{{ student_data.GradYear }}" aria-describedby="inputGroup-sizing-sm" max="2050" name="gradYear" required>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="text-dark-emphasis">Pre University</h4>
+                <div class="row row-cols-1 row-cols-lg-4 g-2 g-lg-3">
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">College</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" value="{{ student_data.PucCollege }}" aria-describedby="inputGroup-sizing-sm" name="pucCollege" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Course</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" max="100" name="pucBranch" value="{{ student_data.PucBranch }}" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Percentage</span>
+                            <input type="number" class="form-control" aria-label="Sizing example input" value="{{ student_data.PucPercentage }}" aria-describedby="inputGroup-sizing-sm" max="100" name="pucPercentage" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Year of Passed Out</span>
+                            <input type="number" class="form-control" aria-label="Sizing example input" value="{{ student_data.PucYear }}" aria-describedby="inputGroup-sizing-sm" max="2050" name="pucYear">
+                        </div>
+                    </div>
+                </div>
+                <h4 class="text-dark-emphasis">School</h4>
+                <div class="row row-cols-1 row-cols-lg-4 g-2 g-lg-3">
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">School Name</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" value="{{ student_data.SscCollege }}" aria-describedby="inputGroup-sizing-sm" name="sscName" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Course</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" max="100" name="sscBranch" value="{{ student_data.SscBranch }}" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Percentage</span>
+                            <input type="number" class="form-control" aria-label="Sizing example input" value="{{ student_data.SscPercentage }}" aria-describedby="inputGroup-sizing-sm" max="100" name="sscPercentage"  required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Year of Passed Out</span>
+                            <input type="number" class="form-control" aria-label="Sizing example input" value="{{ student_data.SscYear }}" aria-describedby="inputGroup-sizing-sm" max="2050" name="sscYear" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-dark" type="submit" name="edu-btn">Update</button>
+                </div>
+            </form>
+        </div>
+        <div class="d-flex justify-content-center m-2">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#skills" aria-expanded="false" aria-controls="collapseExample">
+                skills
+            </button>
+        </div>
+        <div class="collapse" id="skills">
+            <div class="card card-body">
+                <div class="container col-8">
+                    <h4 class="text-dark-emphasis">Add Skills</h4>
+                    <form class="row mb-3" method="POST">{% csrf_token %}
+                        <div class="col-lg-5">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Skill</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Mention Skill" aria-describedby="inputGroup-sizing-sm" name="skillName" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Proficiency</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" placeholder="From 1 - 100 " aria-describedby="inputGroup-sizing-sm" name="proficiency" required>
+                            </div>
+                            <span class="font-s col-lg-0">On Scale of 1 - 100</span>
+                        </div>
+                        <div class="col-lg-2">
+                            <button type="submit" class="btn btn-success" name="skill-btn">Add</button>
+                        </div>
+                    </form>
+                    <h4 class="text-dark-emphasis">Your Skills</h4>
+                    <hr />
+                    {% if student_data.skills %}
+                    {% for skill in student_data.skills.all %}
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Skill</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" value="{{ skill.skillName }}" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Proficiency</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" value="{{ skill.proficiency }}" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="{% url 'deleteSkill' skill.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <!--div class="row">
+                        <div class="col-lg-5">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Skill</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" value="SVREC" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Proficiency</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" value="80" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+
+                        </div>
+                        <div class="col-lg-2">
+                            <a href="" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div-->
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center m-2">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#certifications" aria-expanded="false" aria-controls="collapseExample">
+                Certifications
+            </button>
+        </div>
+        <div class="collapse" id="certifications">
+            <div class="card card-body border-0 shadow">
+                <form method="POST">{% csrf_token %}
+                    <div class="row row-cols-1 row-cols-lg-3">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Certification Name" aria-describedby="inputGroup-sizing-sm" name="certName" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Year</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" placeholder="Year Acheived" aria-describedby="inputGroup-sizing-sm" name="certYear" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">URL</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Paste the URL" aria-describedby="inputGroup-sizing-sm" name="certURL" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-success" type="submit" name="cert-btn">Add</button>
+                    </div>
+                </form>
+                <h4 class="text-center mt-3">Your Certifications</h4>
+                <hr />
+                {% if student_data.certifications %}
+                {% for cert in student_data.certifications.all %}
+                <div class="container col-8">
+                    <div class="row">
+                        <div class="col-lg-10 text-center p-2">
+                            <p class="text-dark-emphasis">{{ cert.certificationName }}</p>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-center h-25">
+                           <a href="{% url 'deleteCertification' cert.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <!--div class="container col-8">
+                    <div class="row">
+                        <div class="col-lg-10 text-center p-2">
+                            <p class="text-dark-emphasis">Certification Name</p>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-center h-25">
+                            <a href="" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div-->
+            </div>
+        </div>
+        <div class="d-flex justify-content-center m-2">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#internships" aria-expanded="false" aria-controls="collapseExample">
+                Internships
+            </button>
+        </div>
+        <div class="collapse " id="internships">
+            <div class="card card-body ">
+                <form method="POST">{% csrf_token %}
+                    <div class="row row-cols-1 row-cols-lg-3">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Name</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Name of Internship" aria-describedby="inputGroup-sizing-sm" name="iName" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Year</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" placeholder="Year of Completion" aria-describedby="inputGroup-sizing-sm" name="iYear" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Duration</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" placeholder="Duration in Months" aria-describedby="inputGroup-sizing-sm" name="iDuration" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Provider</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Provider" aria-describedby="inputGroup-sizing-sm" name="iProvider" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <select class="form-select" aria-label="Default select example" name="iStatus">
+                                <option selected>Status</option>
+                                <option value="1">Completed</option>
+                                <option value="2">On Going</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">URL</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Optional" aria-describedby="inputGroup-sizing-sm" name="iUrl">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-dark" type="submit" name="intern-btn">ADD</button>
+                    </div>
+                </form>
+                <h4 class="text-dark-emphasis">Your Internships</h4>
+                <hr />
+                {% if student_data.internships %}
+                {% for intern in student_data.internships.all %}
+                <div class="container col-8 p-3 shadow">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <p class="text-dark-emphasis">{{ intern.internshipName }}</p>
+                            <p class="text-dark-emphasis">{{ intern.provider }}</p>
+                            <p class="text-dark-emphasis">{% if intern.status %} Completed {% else %} Ongoing {% endif %}</p>
+                        </div>
+
+                        <a href="{% url 'deleteInternship' intern.id %}" class="btn btn-danger col-md-2 d-flex justify-content-center align-items-center h-100">Delete</a>
+                    </div>
+                </div>
+                    <br>
+                {% endfor %}
+                {% endif %}
+                <!--div class="container col-8">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <p class="text-dark-emphasis">Internship Name</p>
+                            <p class="text-dark-emphasis">Provider</p>
+                            <p class="text-dark-emphasis">Status</p>
+                        </div>
+
+                        <a href="" class="btn btn-danger col-md-2 d-flex justify-content-center align-items-center h-100">Delete</a>
+                    </div>
+                </div-->
+            </div>
+        </div>
+        <div class="d-flex justify-content-center m-2 ">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#projects" aria-expanded="false" aria-controls="collapseExample">
+                Projects
+            </button>
+        </div>
+        <div class="collapse " id="projects">
+            <div     class="card card-body border-0 shadow">
+                <form method="POST">{% csrf_token %}
+                    <div class="row row-cols-1 row-cols-lg-2">
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Project Name</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="Name of Project" aria-describedby="inputGroup-sizing-sm" name="pName" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Year</span>
+                                <input type="number" class="form-control" aria-label="Sizing example input" placeholder="Year of Completion" aria-describedby="inputGroup-sizing-sm" name="pYear" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="Project Description" id="floatingTextarea" maxlength="250" name="pDescription" required></textarea>
+                                <label for="floatingTextarea">Project Description</label>
+                            </div>
+                            <span class="font-s">Limited to 250 Characters</span>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="GitHub URL" id="floatingTextarea" maxlength="1000" name="pURL" required></textarea>
+                                <label for="floatingTextarea">GitHub URL</label>
+                            </div>
+                            <span class="font-s">Limited to 500 Characters</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center m-2">
+                        <button class="btn btn-dark" type="submit" name="project-btn">Add</button>
+                    </div>
+                </form>
+                <h4 class="text-dark-emphasis text-center">Your Projects</h4>
+                <hr/>
+                {% if student_data.projects %}
+                {% for project in student_data.projects.all %}
+                <div class="container col-8 p-3 shadow">
+                    <div class="row">
+                        <div class="col-lg-10 text-center p-2">
+                            <p class="text-dark-emphasis">{{ project.projectName }}</p>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-center h-25">
+                            <a href="{% url 'deleteProject' project.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <!--div class="container col-8 p-3">
+                    <div class="row">
+                        <div class="col-lg-10 text-center p-2">
+                            <p class="text-dark-emphasis">Project Name</p>
+                        </div>
+                        <div class="col-lg-2 d-flex justify-content-center h-25">
+                            <a href="" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div-->
+            </div>
+        </div>
+        <div class="d-flex justify-content-center m-2 ">
+            <button class="btn btn-primary btn-w" type="button" data-bs-toggle="collapse" data-bs-target="#contact" aria-expanded="false" aria-controls="collapseExample">
+                Contact
+            </button>
+        </div>
+        <div class="collapse" id="contact">
+            <div class="card card-body border-0 shadow">
+                <h4 class="text-dark-emphesis text-center">Contact Information</h4>
+                <hr />
+                <form method="POST">{% csrf_token %}
+                    <div class="row row-cols-1 row-cols-lg-2 g-2 g-lg-3">
+                        <div class="col d-flex align-items-center justify-content-center">
+                            <p>{{ request.user.email }}</p>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">City</span>
+                                <input type="text" class="form-control" aria-label="Sizing example input" placeholder="City" value="{{ student_data.address }}" aria-describedby="inputGroup-sizing-sm" name="address" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="GitHUb Profile" name="gProfile" value="{{ student_data.githubProfile }}" required>
+                                <label for="floatingTextarea">GitHub Profile URL</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="LinkedIn Profile" value="{{ student_data.linkedinProfile }}" name="linkedin" required>
+                                <label for="floatingTextarea">LinkedIn Profile URL</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-2">
+                        <button class="btn btn-dark" type="submit" name="contact-btn">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js " integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js " integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+ " crossorigin="anonymous "></script>
+</body>
+
+</html>

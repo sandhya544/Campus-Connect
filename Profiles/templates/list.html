@@ -1,0 +1,153 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>SVREC Profiles</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/list.css' %}">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><strong class="text-emphasis">Campus-Connect</strong></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!--li class="nav-item">
+                            <a class="btn btn-primary active" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                            Dashboard
+                            </a>
+                            </li-->
+                    </ul>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-primary" type="submit" href="{% url 'logout' %}">Login</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container col-lg-8">
+            {% if messages %} {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %} {% endif %}
+        </div>
+        <section class="section-50">
+            <div class="container col-lg-8">
+                <div class="d-lg-flex justify-content-between">
+                    <h3 class="m-b-50 heading-line">Our Students &nbsp;<i class="fa-solid fa-users" style="color: #005eff;"></i></h3>
+                    <div class="">
+                        <p class=""><small>Click Below button to send Selected students report to TPO</small></p>
+                        <a href="{% url 'send_report' event.eventCode %}" class="btn btn-success shadow d-flex justify-content-center align-items-center"><i class="fa-regular fa-clipboard" style="color: #ffffff;"></i> &nbsp; Send Report</a>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="mt-2 text-success"><strong>Selected: {{ event.selected.count }}</strong></p>
+                    <p class="mt-2"><strong>Total Participated: {{ event.profiles.count }}</strong></p>
+                </div>
+                <div class="d-lg-flex justify-content-end">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#selected">
+                    <span><i class="fa-solid fa-list-check" style="color: #ffffff;margin-right: 5px"></i></span> Selected
+                    </button>
+                </div>
+                <div>
+                    <div class="modal fade" id="selected" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Selected List</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    {% if event.selected.all %}
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-striped-columns w-100 text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Roll Number</th>
+                                                    <th scope="col">Branch</th>
+                                                    <th scope="col">Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for selected_student in event.selected.all %}
+                                                <tr>
+                                                    <td>{{ selected_student.rollNumber.first_name }} {{ selected_student.rollNumber.last_name }}</td>
+                                                    <td>{{ selected_student.rollNumber.username }}</td>
+                                                    <td>{{ selected_student.GradBranch }}</td>
+                                                    <td>{{ selected_student.rollNumber.email }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {% else %}
+                                    <div class="bg-danger text-white p-3 rounded-3">
+                                        <h4 class="text-center">No Students Selected</h4>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary"><span><i class="fa-solid fa-download" style="color: #ffffff;margin-right: 5px"></i></span>Download CSV</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <br>
+                <div class="notification-ui_dd-content">
+                    {% if event.profiles %}
+                    {% for profile in event.profiles.all %}
+                    <div class="notification-list notification-list--unread">
+                        <div class="notification-list_content">
+                            <div class="notification-list_img">
+                                {% if  profile.gender %}
+                                <img src="{% static 'images/male.png' %}" alt="user">
+                                {% else %}
+                                <img src="{% static 'images/hi.png' %}" alt="user">
+                                {% endif %}
+                            </div>
+                            <div class="notification-list_detail">
+                                <p><b>{{ profile.rollNumber.first_name }}</b> {{ profile.rollNumber.last_name }}</p>
+                                <p class="text-muted">{{ profile.rollNumber.username }}</p>
+                                <p class="text-muted" style="width: min-content"><small>{{ profile.GradBranch }}</small></p>
+                            </div>
+                        </div>
+                        <div class="notification-list_feature-img">
+                            {% if profile in event.selected.all %}
+                            <div class="text-center">
+                                <p class="text-success fw-bold">SELECTED</p>
+                            </div>
+                            {% endif %}
+                            <div class="set">
+                                <a style="width: 100%;margin: 2px" class="btn btn-outline-primary list-btn d-flex align-items-center" href="{% url 'showEvent' event.eventCode profile.rollNumber.username %}"><i class="fa-solid fa-circle-user" style="color: #0011c3;"></i>&nbsp;Profile</a>
+                                {% if profile in event.selected.all %}
+                                <a style="width: 100%;margin: 2px" class="btn btn-outline-danger list-btn d-flex align-items-center" href="{% url 'dis_select_student' event.eventCode profile.rollNumber %}"><i class="fa-solid fa-circle-xmark" style="color: #ff0000;"></i>&nbsp;Drop</a>
+                                {% else %}
+                                <a style="width: 100%;margin: 2px" class="btn btn-outline-success list-btn d-flex align-items-center h-25" href="{% url 'select_student' event.eventCode profile.rollNumber %}"><i class="fa-solid fa-circle-check" style="color: #03c300;margin-right: 5px"></i>Select</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="bg-danger text-white p-3 rounded-3">
+                        <h4 class="text-center">No Students Found</h4>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <script src="https://kit.fontawesome.com/dedeab9b5a.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    </body>
+</html>

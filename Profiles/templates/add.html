@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ event.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .back {
+            background: linear-gradient(180deg, rgb(255, 134, 90), pink, violet);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><strong class="text-emphasis">Campus-Connect</strong></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>   
+          </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="btn btn-primary active" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                            Dashboard
+                          </a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a class="btn btn-danger" type="submit" href="{% url 'logout' %}">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% include 'offcanvas.html' %}
+
+    <hr/>
+    <div class="container col-lg-8">
+        <h3 class="text-dark-emphasis text-center mb-4">Add Students to Event</h3>
+        <div class="d-lg-flex justify-content-around text-center">
+            <div class="col mb-2">
+                <p class="m-0"><strong>Event Name</strong><br>{{ event.title }}</p>
+            </div>
+            <div class="col mb-2">
+                <p class="m-0"><strong>Company Name</strong><br>{{ event.company }}</p>
+            </div>
+        </div>
+        <div class="d-lg-flex justify-content-around text-center">
+            <div class="col mb-2">
+                <p class="m-0"><strong>Description</strong><br>{{ event.description }}</p>
+            </div>
+            <div class="col mb-2">
+                <p class="m-0"><strong>Date</strong><br>{{event.date | truncatechars:12}}</p>
+            </div>
+        </div>
+        <div class="d-lg-flex justify-content-around text-center">
+            <div class="col mb-2">
+                <p class="m-0"><strong>Venue</strong><br>{{ event.venue }}</p>
+            </div>
+            <div class="col mb-2">
+                <p class="m-0"><strong>Expiry Date</strong><br>{{event.expiryDate | truncatechars:12}}</p>
+            </div>
+        </div>
+        <div class="d-lg-flex justify-content-around text-center">
+            <div class="col mb-2">
+                <p class="m-0"><strong>Event Code</strong><br>{{ event.eventCode }}</p>
+            </div>
+            <div class="col mb-2">
+                <p class="m-0"><strong>Enrolled Students</strong><br>{{event.profiles.count}}</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#selected">
+              <span><i class="fa-solid fa-list-check" style="color: #ffffff;margin-right: 5px"></i></span> Selected
+            </button>
+            <a href="{% url 'sendMail' event.id %}" class="btn btn-success">Send Mail to Recruiter</a>
+        </div>
+        <hr/>
+        <div>
+            <div class="modal fade" id="selected" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel">Selected List</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                  {% if event.selected.all %}
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped-columns w-100 text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Roll Number</th>
+                                        <th scope="col">Branch</th>
+                                        <th scope="col">Email</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for selected_student in event.selected.all %}
+                                    <tr>
+                                        <td>{{ selected_student.rollNumber.first_name }} {{ selected_student.rollNumber.last_name }}</td>
+                                        <td>{{ selected_student.rollNumber.username }}</td>
+                                        <td>{{ selected_student.GradBranch }}</td>
+                                        <td>{{ selected_student.rollNumber.email }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                    <div class="bg-danger text-white p-3 rounded-3">
+                        <h4 class="text-center">No Students Selected</h4>
+                    </div>
+                  {% endif %}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"><span><i class="fa-solid fa-download" style="color: #ffffff;margin-right: 5px"></i></span>Download CSV</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="container col-lg-6 text-center">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <h6 class="text-dark-emphasis text-center">Add Individual student</h6>
+        <div class="d-lg-flex justify-content-center">
+            <form class="col-md-6" method="POST">{% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Student Roll Number" aria-label="Roll Number" aria-describedby="button-addon2" name="rollNumber">
+                    <button class="btn btn-secondary" type="submit" id="button-addon2" name="add-btn">Add</button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <h6 class="text-dark-emphasis text-center">Add Students in Bulk</h6>
+        <form method="POST">{% csrf_token %}
+            <div class="row row-cols-1 row-cols-lg-4">
+                <div class="col">
+                    <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="skill">
+                        <option value="" selected>All Skills</option>
+                        {% for skill in skillSet %}
+                            <option value="{{ skill.skillName }}">{{ skill.skillName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="branch">
+                        <option value="" selected>ALL Branches</option>
+                        <option value="Computer Science Engineering">CSE</option>
+                        <option value="Electronic and Communication Engineering">ECE</option>
+                        <option value="Electrical and Electronic Engineering">EEE</option>
+                        <option value="Mechanical Engineering">MECH</option>
+                        <option value="Civil Engineering">CIVIL</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Percentage</span>
+                        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="60" name="percentage">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">YOP</span>
+                        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="year" required>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-success" name="bulk-btn" type="submit">Add Students</button>
+            </div>
+        </form>
+        <br>
+        <hr/>
+        <div class="">
+            <h3 class="text-dark-emphasis text-center mb-4">Enrolled Students</h3>
+            {% for profile in event.profiles.all %}
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <p>{{ profile.rollNumber }}</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <p>{{ profile.rollNumber.first_name }} . {{ profile.rollNumber.last_name }}</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a href="{%  url 'removeStudent' event.id profile.rollNumber.username %}" class="btn btn-danger">Remove</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+
+</html>

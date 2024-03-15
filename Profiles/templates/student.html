@@ -1,0 +1,614 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>{{ student.rollNumber.first_name }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/preview.css' %}">
+    <style>
+        .dd-card{
+            top: 50%;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px 0 inset rgba(255, 255, 255, 0.48);
+            /*glassmorphism*/
+            background: rgba(0, 0, 0, 0.67);
+            backdrop-filter: blur( 2px );
+            -webkit-backdrop-filter: blur( 4px );
+
+            border: 1px inset rgb(255, 255, 255);
+        }
+        @media (max-width: 576px) {
+            .dd-card{
+                top: 75%;
+                border-radius: 10px;
+                box-shadow: 0px 0px 5px 0 inset rgba(255, 255, 255, 0.48);
+                /*glassmorphism*/
+                background: rgba(0, 0, 0, 0.67);
+                backdrop-filter: blur( 2px );
+                -webkit-backdrop-filter: blur( 4px );
+
+                border: 1px inset rgb(255, 255, 255);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid bg-secondary" style="background: rgba(0, 0, 0, 0.425);">
+        <nav data-mdb-navbar-init class="navbar navbar-expand-lg navbar-dark bg-black sticky-top">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                <!-- Toggle button -->
+                <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarCenteredExample" aria-controls="navbarCenteredExample" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+              </button>
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarCenteredExample">
+                    <!-- Left links -->
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">
+                                <span>
+                                    <i class="fa-solid fa-arrow-right" style="color: #ffffff;"></i>
+                                </span> &nbsp INTRO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">
+                                <span>
+                                    <i class="fa-solid fa-address-card" style="color: #ffffff;"></i>
+                                        </span> &nbsp ABOUT</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#education"><span>
+                                <i class="fa-solid fa-school" style="color: #ffffff;"></i>
+                            </span> &nbsp EDUCATION</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#skills"><span>
+                                <i class="fa-solid fa-gear" style="color: #ffffff;"></i>
+                        </span> &nbsp SKILLS</a>
+                        </li>
+                        {% if student.certifications.all %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#certifications">
+                                <span>
+                                    <i class="fa-solid fa-certificate" style="color: #ffffff;"></i>
+                            </span> &nbsp CERTIFICATIONS</a>
+                        </li>
+                        {% endif %}
+                        {% if student.internships.all %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#internships"><span>
+                                <i class="fa-solid fa-briefcase" style="color: #ffffff;"></i>
+                        </span> &nbsp INTERNSHIPS</a>
+                        </li>
+                        {% endif %}
+                        {% if student.projects.all %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#projects"><span>
+                                <i class="fa-solid fa-laptop" style="color: #ffffff;"></i>
+                        </span> &nbsp PROJECTS</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#contact"><span>
+                                <i class="fa-solid fa-address-book" style="color: #ffffff;"></i>
+                            </span>&nbsp CONTACT</a>
+                        </li>
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
+            </div>
+            <!-- Container wrapper -->
+        </nav>
+
+        <!--picture-->
+        <section id="aboutme" class="bg-black border-light mb-0 pb-0">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 col-sm-12 p-3 d-flex justify-content-center">
+                        {% if student.gender %}
+                        <img class="img-fluid rounded-circle" src="{% static 'images/male.png' %}" alt="" width="400px" height="auto" style="box-shadow: 5px 5px 5px white;">
+                        {% else %}
+                        <img class="img-fluid rounded-circle" src="{% static 'images/hi.png' %}" alt="" width="400px" height="auto" style="box-shadow: 5px 5px 5px white;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-light ">
+                        <p><strong>Hi, I'm</strong></p>
+                        <h1>{{ student.rollNumber.first_name }} {{ student.rollNumber.last_name }}</h1>
+                        <p>{{ student.tagline }}</p>
+                        <hr style="color: white; " />
+                        <p style="text-align: justify;">{{ student.about }}</p>
+
+
+                    </div>
+                </div>
+            </div>
+            <br id="education">
+            <br>
+        </section>
+        <!--About me end-->
+
+        <!--Education-->
+        <section id="education" class="bg-white border-light pt-3">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 ">
+                    <div class="section-header text-center wow fadeInUp" data-wow-delay=".2s">
+                        <h3><span><i class="fa-solid fa-school" style="color: #000000;"></i>
+                         &nbspEducation</span></h3>
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+            <center>
+                <div class="container pb row row-cols-lg-3 row-cols-1 g-lg-3 g-2 mb-0 pb-0">
+
+                    <div class="col">
+                        <div class="row align-items-center text-start p-2" style="height: 100%;">
+                            <div class="card mb-3" style="max-width: 540px;height: 100%;">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-content-center justify-content-center edu-icon">
+                                        <i class="fa-solid fa-user-graduate fa-2xl img-fluid rounded-start" style="color: #ff6600;"></i>
+                                        <!--img src="..." class="img-fluid   rounded-start" alt="..."-->
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Bachelor of Technology</h5>
+                                            <p class="card-text mb-0">{{ student.GradBranch }}</p>
+                                            <p class="card-text mb-0"><small class="text-muted">{{ student.GradCollege }}</small></p>
+                                            <p class="card-text pt-0"><small class="text-muted">Year of Passing: {{ student.GradYear }}</small></p>
+                                            <!--percentage-->
+                                            <small class="text-success card-footer"><strong>Percentage: {{ student.GradPercentage }} %</strong></small>
+                                            <!--p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row align-items-center text-start  p-2" style="height: 100%;">
+                            <div class="card mb-3" style="max-width: 540px;height: 100%;">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-content-center justify-content-center edu-icon">
+                                        <i class="fa-solid fa-school fa-2xl img-fluid rounded-start" style="color: #ff6600;"></i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Pre-University Course</h5>
+                                            <p class="card-text mb-0">{{ student.PucBranch }}</p>
+                                            <p class="card-text mb-0"><small class="text-muted">{{ student.PucCollege }} </small></p>
+                                            <p class="card-text pt-0"><small class="text-muted">Year of Passing: {{ student.PucYear }}</small></p>
+                                            <!--percentage-->
+                                            <small class="text-success card-footer"><strong>Percentage: {{ student.PucPercentage }} %</strong></small>
+                                            <!--p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p-->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row align-items-center text-start  p-2" style="height: 100%;">
+                            <div class="card mb-3" style="max-width: 540px;height: 100%;">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-content-center justify-content-center edu-icon">
+                                        <i class="fa-solid fa-book-open fa-2xl img-fluid rounded-start" style="color: #ff6600;"></i>
+                                        <!--img src="..." class="" alt="..."-->
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">School</h5>
+                                            <p class="card-text mb-0">{{ student.SscBranch }}</p>
+                                            <p class="card-text mb-0"><small class="text-muted">{{ student.SscCollege }}</small></p>
+                                            <p class="card-text pt-0"><small class="text-muted">Year of Passing: {{ student.SscYear }}</small></p>
+                                            <!--percentage-->
+                                            <small class="text-success card-footer"><strong>Percentage: {{ student.SscPercentage }} %</strong></small>
+                                            <!-- p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--div class="col-lg-4 col-md-12 col-sm-12">
+                                <h5 class="text-center mt-3">Graduation</h5>
+                            </div>
+                            <div class="col-lg-8 col-md-12 col-sm-12 " style="border-left: 1px solid black;">
+
+                                <ul class="list-group list-group-flush">
+
+                                    <h5>Bachelor of Technology in Computer Science and Engineering (CSE)</h5>
+                                    <small>University of Delhi</small>
+                                    <br>
+                                    <small>GPA : 7.8 / 10</small>
+                                    <br>
+                                    <small>Duration : January 2018 - July 2022</small>
+                                    <br>
+                                    <small>CGPA : 8.6 / 10</small>
+                                    <br>
+                                </ul>
+
+                            </div-->
+                        </div>
+                    </div>
+                </div>
+            </center>
+            <br id="skills">
+            <br>
+        </section>
+        <!--Education End-->
+
+
+        <!--Skill start -->
+
+        <section class="pt-4 pb-0 mt-0 border-light border-2" style="background-color: rgb(0, 0, 0);">
+            <div class="container ">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 ">
+                        <div class="section-header text-center text-white  wow fadeInUp" data-wow-delay=".2s">
+                            <h3><span><i class="fa-solid fa-gear" style="color: #ffffff;"></i> &nbsp SKILLS</span></h3>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+                <div class="container col-lg-10 col-10 p-1">
+                    <div class="row row-cols-1 row-cols-lg-3 g-lg-5 g-2 d-lg-flex justify-content-center">
+                        {% for skill in student.skills.all %}
+                            <div class="col">
+                            <div class="card bg-black" style="box-shadow: rgba(0, 115, 255, 0.301) 0px 10px 20px;border:1px solid rgba(255, 255, 255, 0.32);">
+                                <div class="card-body">
+                                    <center>
+                                        <i class="fa-solid fa-{{ forloop.counter }} fa-2xl" style="color: white;font-size: 3rem;"></i>
+                                    </center>
+                                    <h5 class="card-title text-center mt-3 text-white">{{ skill.skillName }}</h5>
+                                    <p class="text-white">Proficiency</p>
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped" style="width: {{ skill.proficiency }}%"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+            <br id="certifications">
+            <br>
+        </section>
+        <!--skills end-->
+
+        <!--Certifications-->
+
+        <section class="certification section-padding bg-white mt-0 pt-4 pb-0">
+        {% if student.certifications.all %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 ">
+                        <div class="section-header text-center wow fadeInUp" data-wow-delay=".2s">
+                            <h3><span><i class="fa-solid fa-certificate" style="color: #000000;"></i> &nbsp CERTIFICATIONS</span></h3>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class=" row d-lg-flex justify-content-center">
+                        {% for certification in student.certifications.all %}
+                            <div class="col-md-4">
+                            <div class="row align-items-center text-start p-2" style="height: 100%;">
+                                <div class="card mb-3" style="max-width: 540px;height: 100%;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                            <!--i class="fa-solid fa-user-graduate fa-2xl img-fluid rounded-start" style="color: #ff6600;"></i-->
+                                            <img src="{% static 'images/badgeT.jpg' %}" class="img-fluid rounded-start" style="height: max-content;" alt="badge">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ certification.certificationName }}</h5>
+
+                                                <p class="card-text pt-0"><small class="text-muted">Year of Achieve:
+                                                    {{ certification.year }}</small></p>
+
+                                                <!--percentage-->
+                                                <div class="d-flex justify-content-end">
+                                                <a class="btn btn-success" href="{{ certification.url }}">Verify</a>
+                                                 </div>
+                                                <!--p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--div class="row row-cols-1 row-cols-lg-2 g-lg-3 g-2">
+                        <div class="col p-2">
+                            <div class="d-flex justify-content-center">
+                                <img class="img-fluid rounded-bottom-circle p-2" src="/images/badgeT.jpg" alt="" width="200px" height="auto" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.342);">
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <strong><p class="mt-3 mb-0">certification Name</p></strong>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                <a href="https://www.credly.com/badges/decd1058-c423-4f67-b850-9adf6ab5db96/public_url" class="btn btn-success">Verify</a>
+                            </div>
+                        </div>
+                        <div class="col p-2">
+                            <div class="d-flex justify-content-center">
+                                <img class="img-fluid rounded-bottom-circle p-2" src="/images/badgeT.jpg" alt="" width="200px" height="auto" style="box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.342);">
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <strong><p class="mt-3 mb-0">certification Name</p></strong>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                <a href="https://www.credly.com/badges/decd1058-c423-4f67-b850-9adf6ab5db96/public_url" class="btn btn-success">Verify</a>
+                            </div>
+                        </div>
+                    </div-->
+            </div>
+            {% endif %}
+            <br id="internships">
+            <br>
+        </section>
+
+
+        <!--Cerifications End-->
+        <!--INTERNSHIPS-->
+
+        <section class="internships section-padding bg-black pt-4 pb-0">
+            {% if student.internships.all %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 ">
+                        <div class="section-header text-center text-white wow fadeInUp" data-wow-delay=".2s">
+                            <h3><span><i class="fa-solid fa-briefcase" style="color: #ffffff;"></i> &nbsp INTERNSHIPS</span></h3>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="d-lg-flex justify-content-center">
+                        {% for internship in student.internships.all %}
+                            <div class="col-md-4 m-2">
+                            <div class="d-flex  rounded" style="background: #1D3461;">
+                                <div class="col-4">
+                                    <img class="img-fluid rounded bg-white" src="{% static 'images/intern.png' %}" alt="">
+                                </div>
+                                <div class="col-8">
+                                    <p class="px-3 text-white text-center"><strong>{{ internship.internshipName }}</strong></p>
+                                    <ul class="list-group list-group-light p-2">
+                                        <li class="list-group-item px-3 border-0 p-0 intern text-white"><i>Organization</i>: <strong>{{ internship.provider }}</strong></li>
+                                        <li class="list-group-item px-3 border-0 p-0 intern text-white"><i>Duration</i>: {{ internship.duration }} months</li>
+
+
+                                        <li class="list-group-item px-3 border-0 p-0 intern text-white"><i>status</i>: {% if internship.status %} Completed {% else %} Ongoing {% endif %}</li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <br id="projects">
+            <br>
+            <br>
+        </section>
+
+        <!--Projects-->
+
+        <section class="projects section-padding bg-white mt-0 pt-4 pb-0 mb-0">
+        {% if student.projects.all %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6 ">
+                        <div class="section-header text-center wow fadeInUp" data-wow-delay=".2s">
+                            <h3><span><i class="fa-solid fa-laptop" style="color: #000000;"></i> &nbsp PROJECTS</span></h3>
+                            <hr />
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                {% for project in student.projects.all %}
+                <div class="">
+                    <div class="container-lg col-lg-8">
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4 d-flex align-items-center">
+                                    <img src="{% static 'images/project.png' %}" alt="Trendy Pants and Shoes" class="img-fluid rounded-start card-image" />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ project.projectName }}</h5>
+                                        <p class="card-text">
+                                            <strong>Project Description</strong> <br> {{ project.description }}
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Completed in {{ project.year }}</small>
+                                        </p>
+                                        <div class="card-footer justify-content-end d-flex">
+                                            <a href="{{ project.githubUrl }}" class="btn btn-success"><i class="fa-brands fa-github fa-2xl" style="color: #ffffff;"></i>&nbsp GitHub</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <center>
+                    <!--div class="d-lg-flex justify-content-center align-content-center">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-sl">
+                                <div class="card-image">
+                                    <img src="images/project.png" class="img-fluid" />
+                                </div>
+
+                                <div class="card-heading">
+                                    QuizQuest
+                                </div>
+                                <div class="card-text">
+                                    Challenge your knowledge and have fun with QuizQuest, the ultimate quiz app offering a diverse range of engaging quizzes for every intellect.
+                                </div>
+                                <div class="card-text">
+                                    <a href="" class="btn btn-success"><i class="fa-brands fa-github fa-2xl" style="color: #ffffff;"></i>&nbsp GitHub</a>
+                                </div>
+                                <a href="#" type="button" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#project1" class="card-button"> Read More</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-sl">
+                                <div class="card-image">
+                                    <img src="images/project.png" class="img-fluid" />
+                                </div>
+
+
+                                <div class="card-heading">
+                                    AttendEase
+                                </div>
+                                <div class="card-text">
+                                    Effortlessly manage attendance and time tracking with AttendEase, streamlining organizational processes for enhanced efficiency.
+                                </div>
+                                <div class="card-text">
+                                    <a href="" class="btn btn-success"><i class="fa-brands fa-github fa-2xl" style="color: #ffffff;"></i>&nbsp GitHub</a>
+                                </div>
+                                <a href="#" type="button" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#project2" class="card-button"> Read More</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-sl">
+                                <div class="card-image">
+                                    <img src="images/project.png" class="img-fluid" />
+                                </div>
+
+
+                                <div class="card-heading">
+                                    CertiVault
+                                </div>
+                                <div class="card-text">
+                                    Elevate your professional profile with CertiVault, the secure platform for seamlessly storing and presenting your certifications.
+                                </div>
+                                <div class="card-text">
+                                    <a href="" class="btn btn-success"><i class="fa-brands fa-github fa-2xl" style="color: #ffffff;"></i>&nbsp GitHub</a>
+                                </div>
+                                <a href="#" type="button" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#project3" class="card-button"> Read More</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    </div-->
+                </center>
+            </div>
+            {% endif %}
+                <br id="contact">
+                <br>
+        </section>
+
+    <!-- Fixed Developer Card -->
+         <div class="col-md-3 position-fixed end-0 translate-middle-y col-8 dd-card rounded-5">
+                    <div class="card text-white bg-transparent">
+                        <div class="card-header text-center text-uppercase">Dev Details</div>
+                        <div class="card-body text-center bg-glass">
+                            <img src="{% static 'images/hi.png' %}" alt="Developer Avatar" class="img-fluid rounded-circle mb-3 w-25 h-25">
+                            <h5 class="card-title">Sandhya Rani L</h5>
+                            <p class="card-text bg-transparent text-white">Fullstack Web Developer.</p>
+                            <div class="row row-cols-1">
+                                <div class="col">
+                                <a href="https://www.linkedin.com/in/sandhya-rani-lagisetty-999536221/" class="btn btn-light"><i class="fa-solid fa-globe" style="color: #000000;"></i> &nbsp Portfolio</a></div>
+                            </div>
+                            <div class="d-lg-flex justify-content-center">
+                                <a href="https://www.linkedin.com/in/sandhya-rani-lagisetty-999536221/" class="btn btn-primary m-lg-1 m-1"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/sandhya544" class="btn btn-success m-lg-1 m-1"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+         </div>
+            <div class="fixed-top fixed-left m-5">
+                {% if request.user.is_superuser %}
+                <a class="btn btn-primary blinking-shadow" href="{% url 'manageStudents' %}">Back</a>
+                {% else %}
+                <a class="btn btn-primary blinking-shadow" href="{% url 'showEvent' event_code.eventCode %}">Back</a>
+                {% endif %}
+            </div>
+    <!-- Rest of your HTML code -->
+
+        <!--Projects End-->
+        <!--Contact Start-->
+        <section class="bg-black text-white pt-3 pb-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <center>
+                            <h1 class="mb-4">Connect at</h1>
+                        </center>
+                        <center>
+                            <div class="mb-3">
+                                <a href="{{ student.githubProfile }}" class="btn btn-success w-50 mb-1"><i class="fa-brands fa-github fa-2xl" style="color: #ffffff;"></i> &nbsp GitHub</a>
+                                <br>
+                                <a href="{{ student.linkedinProfile }}" class="btn btn-primary w-50 mb-1"><i class="fa-brands fa-linkedin fa-2xl" style="color: #ffffff;"></i> &nbsp LinkedIn</a>
+                            </div>
+                        </center>
+
+                    </div>
+
+                    <div class="col-md-6 text-center">
+                        <h1 class="mb-lg-5 mb-3">Contact</h1>
+                        <p>
+                            <i class="fa fa-map-marker"></i>
+                            <span>Address:</span>
+                            <span>{{ student.address }}</span>
+                        </p>
+                        <p>
+                            <i class="fa fa-envelope"></i>
+                            <span>Mail:</span>
+                            <a class="text-decoration-none text-white" href="mailto:{{ student.rollNumber.email }}">{{ student.rollNumber.email }}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="https://kit.fontawesome.com/dedeab9b5a.js " crossorigin="anonymous "></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.umd.min.js"></script>
+
+</body>
+</html>

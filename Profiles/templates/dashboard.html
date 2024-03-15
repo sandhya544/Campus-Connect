@@ -1,0 +1,156 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .back {
+            background: linear-gradient(180deg, rgb(255, 134, 90), pink, violet);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><strong class="text-emphasis">Campus-Connect</strong></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="btn btn-primary active" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                     Dashboard
+                     </a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a class="btn btn-danger" type="submit" href="{% url 'logout' %}">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% include 'offcanvas.html' %}
+    <div class="container col-lg-8">
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+    <div class="container col-8 ">
+        <h4 class="text-dark-emphasis text-center">Events</h4>
+        <div class="d-lg-flex justify-content-around">
+            <div class="col-lg-4 m-2">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Create Event</button>
+            </div>
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form class="modal-content" method="POST">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Event</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
+                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="eventName">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Company Name</span>
+                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="company">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="Description" name="eventDescription">
+                                <label for="floatingInput">Description</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+                                        <input type="date" pattern="\d{4}-\d{2}-\d{2}" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="eventDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Expiry Date</span>
+                                        <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="expiryDate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <small>Required</small>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Venue</span>
+                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="eventVenue">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <small>Optional</small>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Event ID</span>
+                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="eventID">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Company Contact Email</span>
+                                <input type="email" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="email">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" name="create-btn">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 m-2">
+                <form class="input-group mb-3" method="POST">{% csrf_token %}
+                    <input type="text" class="form-control" placeholder="Enter Company Name" aria-label="Recipient's username" aria-describedby="button-addon2" name="search">
+                    <button class="btn btn-secondary" type="submit" id="button-addon2" name="search-btn">Search</button>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <h4 class="text-dark-emphasis text-center"></h4>
+        <hr/>
+        <h4 class="text-dark-emphasis text-center">All Events</h4>
+        <hr/>
+        <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3">
+            {% for event in events %}
+            <div class="col">
+                <div class="card shadow  border-dark shadow border-0 border-top">
+                    <p class="text-dark-emphasis text-center mt-3">{{event.title}}</p>
+                    <p class="text-dark-emphasis text-center">Date: <br>{{event.date | date:"Y-m-d" }}</p>
+                    <br>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-success border-0 w-50" href="{% url 'updateEvent' event.id %}"> <i class="fa fa-edit" style="color: white"></i></a>
+                    </div>
+                    <hr/>
+                    <a class="btn btn-success border-0" href="{% url 'eventID' event.id %}">View Details <i class="fa fa-sign-in"></i> </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/dedeab9b5a.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+
+</html>
